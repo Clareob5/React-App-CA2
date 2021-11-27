@@ -1,24 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
+import { useState, useEffect } from 'react';
+//Components
+import TopNavbar from './components/TopNav'
 
-function App() {
+import Account from './pages/Account';
+import Home from './pages/Home';
+import PageNotFound from './pages/PageNotFound';
+import RestaurantsIndex from './pages/restaurants/Index';
+import RestaurantsShow from './pages/restaurants/Show';
+import RestaurantsAdd from './pages/restaurants/Add';
+
+
+const App = () => {
+
+  const [loggedIn, setLoggedIn] = useState(false)
+
+   useEffect(() => {
+        if( localStorage.getItem('token')){
+          setLoggedIn(true)
+        }
+    })
+
+  const onLoggedIn = (auth, token) => {
+    setLoggedIn(auth)
+    if(auth) {
+      localStorage.setItem('token', token)
+    }
+    else{
+      localStorage.removeItem('token')
+    }
+ 
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <TopNavbar onLoggedIn={onLoggedIn} loggedIn = {loggedIn} />
+      <Routes>
+        <Route path="/" element={<Home onLoggedIn={onLoggedIn} loggedIn = {loggedIn} />} />
+        <Route path="/restaurants" element={<RestaurantsIndex />} />
+        <Route path="/restaurants/:id" element={<RestaurantsShow />} />
+        <Route path="/restaurants/add" element={<RestaurantsAdd />} />
+        <Route path="/account" element={<Account />} />
+        <Route path="*" element={<PageNotFound />} />
+      </Routes>
+    </Router>
   );
 }
 
