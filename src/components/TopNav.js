@@ -1,21 +1,24 @@
 import { Link } from 'react-router-dom'
+import Button from '@mui/material/Button';
 
 const TopNavbar = (props) => {
 
    let logoutButton;
   
   if(props.loggedIn){
-    logoutButton = <button onClick={() => props.onLoggedIn(false)}>Logout</button>
+    logoutButton = <Button variant="contained" onClick={() => props.onLoggedIn(false)}>Logout</Button>
   }
 
   
   return (
-    <div>
+    <>
       <Link to="/">Home</Link> |  
       <Link to="/restaurants">Restaurants</Link> | 
       {logoutButton}
-    </div>
+    </>
   )
 }
 
 export default TopNavbar
+
+
