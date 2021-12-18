@@ -15,11 +15,10 @@ const Show = () => {
 
 
   useEffect(() => {
-    axios.get(`restaurants/${id}`)
+    axios.get(`/restaurants/${id}`)
       .then(response => {
         console.log(response.data)
         setRestaurant(response.data.restaurant)
-        setGrades(response.data.restaurant.grades)
       })
       .catch(err => {
         console.log(`Error: ${err}`)
@@ -43,49 +42,35 @@ const Show = () => {
       })
   }
 
-  // const restaurantsList = restaurants.map(restaurant => {
-  //     return (
-  //        <Fragment key={restaurant._id}>   
+  // const gradesList = grades.map(grades => {
+  //   return (
 
-  //             <p><b>Title: </b> <Link to={`/restaurants/${restaurant._id}`}>{restaurant.name}</Link> </p>
-  //             <p><b>Address: </b> {restaurant.address.street} </p>
-  //             <hr />
-  //         </Fragment>
+  //     <Grid item xs={6} key={grades._id}>
+  //       <Card sx={{ minWidth: 275 }}>
+  //         <CardContent>
+  //           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+  //             Restaurant Rating
+  //           </Typography>
+  //           <Typography variant="h5" component="div">
+  //             Grade: {grades.grade}
+  //           </Typography>
+  //           <Typography variant="body2">
+  //             Score: {grades.score}
+  //           </Typography>
+  //           <Typography sx={{ fontSize: 10 }} color="text.secondary" gutterBottom>
+  //             {grades.date}
+  //           </Typography>
+  //         </CardContent>
+  //       </Card>
+  //     </Grid>
 
-  //     )
+  //   )
   // })
-
-  const gradesList = grades.map(grades => {
-    return (
-
-      <Grid item xs={6} key={grades._id}>
-        <Card sx={{ minWidth: 275 }}>
-          <CardContent>
-            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-              Restaurant Rating
-            </Typography>
-            <Typography variant="h5" component="div">
-              Grade: {grades.grade}
-            </Typography>
-            <Typography variant="body2">
-              Score: {grades.score}
-            </Typography>
-            <Typography sx={{ fontSize: 10 }} color="text.secondary" gutterBottom>
-              {grades.date}
-            </Typography>
-          </CardContent>
-        </Card>
-      </Grid>
-
-    )
-  })
 
 
 
   return (
     <Container className="marginTop">
-
-
       <Paper variant="outlined">
         <Typography sx={{ fontSize: 28, fontWeight: 500 }}>
           Restaurant Info

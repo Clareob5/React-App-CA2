@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../config';
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Card, CardContent, Typography, Grid, Box } from '@mui/material';
@@ -12,7 +12,7 @@ const GradesList = () => {
 
 
   useEffect(() => {
-    axios.get(`http://localhost:8000/api/restaurants/${id}`)
+    axios.get(`/restaurants/${id}`)
       .then(response => {
         console.log(response.data.restaurant.grades)
         setGrades(response.data.restaurant.grades)

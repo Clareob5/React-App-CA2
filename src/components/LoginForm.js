@@ -1,47 +1,69 @@
 import { useState } from 'react'
-import axios from 'axios'
+import axios from '../config/index'
 import { useNavigate} from 'react-router-dom'
+import { useContext } from "react";
 
-import { Grid,Paper, Avatar, TextField, Button, CardMedia } from "@mui/material/"
+import { Grid,Paper, Avatar, Button, CardMedia } from "@mui/material/"
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import MyTextField from './formFields/Input'
+import { UserContext } from '../UserContext';
 
 
-const LoginForm=(props,{handleChange})=>{
+const LoginForm = (props, validateOnChange = false)=>{
 
-    const [form, setForm] = useState({email: "clare@mail.com", password: "password"})
+    const [form, setForm] = useState({email: "", password: ""})
+    const [errors, setErrors] = useState({})
+    const {user, setUser} = useContext(UserContext)
+
     let navigate = useNavigate()
- 
+   
+  const validate = (formValues = form) => {
+    let temp = { ...errors }
+    if ('email' in formValues)
+      temp.email = (/.+@.+..+/).test(formValues.email) ? "" : "Email is not valid."
+    if ('password' in formValues)
+      temp.password = formValues.password.length > 7 ? "" : "Minimum 8 characters required."
+    setErrors({
+      ...temp
+    })
+  }
+  
 
   const handleForm = e => {
     setForm(prevState => ({
       ...prevState,
       [e.target.name] : e.target.value
     }))
+    if (validateOnChange)
+      validate({ [e.target.name]: e.target.value })
     console.log(form)
   }
 
 const submitForm = () => {
   console.log(form)
 
-  axios.post('http://localhost:8000/api/users/login', {
+  axios.post('/users/login', {
     email: form.email,
     password: form.password
   })
   .then(response => {
-    //console.log(response.data)
     props.onLoggedIn(true, response.data.auth_token)
-     navigate('/')
-    //setLoggedIn(true)
+    localStorage.setItem('user', response.data.info.id)
+    console.log(response.data.info.id)
+    navigate('/')
   })
-  .catch(err => console.log(`Error: ${err}`))
+  .catch(err => {
+    console.log(`Error: ${err}`)
+    console.log(err.response)
+    setErrors(err.response.data)
+  })
 }
 
-    const paperStyle={padding:20, margin:"0 auto"}
+  const paperStyle={padding:20, margin:"0 auto"}
   const avatarStyle = { backgroundColor:'#FF7982'}
   const btnstyle = { margin: '8px 0', background: '#c74402' }
-    const textFieldStyle={margin:'8px 0'}
     return(
       <Paper style={paperStyle}>
       <Grid container spacing={2} columns={12}>        
@@ -49,20 +71,20 @@ const submitForm = () => {
                      <Avatar style={avatarStyle}><LockOutlinedIcon/></Avatar>
                     <h2>Sign In</h2>
                 
-                <TextField
-                style={textFieldStyle}  
+                <MyTextField
                 onChange={handleForm} 
                 name="email"
-                label={"Email"}  
-                fullWidth required
+                label="Email"
+                error={errors.email} 
+                required
                 />
-                <TextField  
-                 style={textFieldStyle}
+                <MyTextField  
                 name="password" 
                 onChange={handleForm} 
                 label="Password"
-                type="password" 
-                fullWidth required
+                type="password"
+                error={errors.password}
+                 required
                 />
                 <FormControlLabel
                     control={

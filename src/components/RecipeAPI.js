@@ -12,7 +12,10 @@ const RecipeAPI = () => {
     useEffect(() => {
         if(recipes.length <= 0){
         axios.get(
-            `https://api.spoonacular.com/recipes/658007/similar?apiKey=b33eb760c65d46d382a922416da7192a&number=4`
+            `https://api.spoonacular.com/recipes/658007/similar?apiKey=b33eb760c65d46d382a922416da7192a&number=4`, {
+            headers: {
+            'Access-Control-Allow-Origin': '*',
+        }}
         )
         .then(response => {
             console.log(response.data)

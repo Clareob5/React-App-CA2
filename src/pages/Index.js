@@ -39,7 +39,7 @@ const Index = props => {
     })
       .then(response => {
         console.log(response.data)
-        //setRestaurants(response.data.restaurants)
+        setRestaurants(response.data.restaurants)
         navigate("/restaurants")
       })
       .catch(err => {
@@ -51,7 +51,7 @@ const Index = props => {
     axios.get('/restaurants/')
       .then(response => {
         console.log(response.data)
-        setRestaurants(response.data.restaurants)
+        setCoords(response.data.restaurant.address.coord)
        
       })
       .catch(err => {
@@ -86,9 +86,9 @@ const Index = props => {
               <>
                 <Link to={`/restaurants/${params.row._id}`}><VisibilityIcon /></Link>
                 <Link to={`/restaurants/${params.row._id}/edit`}><EditIcon /></Link>
-                {/* <IconButton onClick={() => onDelete(params.row._id)}>
+                <IconButton onClick={() => onDelete(params.row._id)}>
                   <DeleteIcon />
-                </IconButton> */}
+                </IconButton>
               </> : "No Actions"}
           </>
         );
@@ -105,7 +105,7 @@ const Index = props => {
       {/* <p><Link to="/restaurants/add">Add Restaurant</Link></p> */}
       <Container className="App">{props.loggedIn ? <AddRestaurant /> : ""}  </Container>
 
-      <Box sx={{ marginTop: '10', width: '100%', height: 650 }}>
+      <Box sx={{ marginTop: '10', width: '100%', height: 630 }}>
         <DataGrid
           title="Restaurants"
           rows={restaurants}

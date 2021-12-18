@@ -1,36 +1,68 @@
 import axios from '../config/index.js'
-import { useEffect, useState, Fragment } from 'react'
+import { useState, Fragment } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { produce } from 'immer'
 import { generate } from "shortid"
-import { Grid, Typography, TextField, Button, Box, FormControl, InputLabel, Select, MenuItem } from '@mui/material/'
+import { Grid, Typography, TextField, Button, Box } from '@mui/material/'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import MyTextField from './formFields/Input'
+import MySelectField from './formFields/Select'
+import GradeForm from './GradeForm'
 
-const Add = props => {
+const Add = (props, validateOnChange = false) => {
 
     const [form, setForm] = useState(null)
-    const [toggleForm, setToggleForm] = useState(true)
+    const [toggleForm, setToggleForm] = useState(false)
     const [gradesList, setGradesList] = useState([])
+    const [errors, setErrors] = useState({})
 
     let token = localStorage.getItem('token')
     let navigate = useNavigate()
+
+    const validate = (formValues = form) => {
+        let temp = { ...errors }
+        if ('building' in formValues)
+            temp.building = formValues.building.length > 3 ? "" : "This field must have at least 3 letters."
+        if ('coord1' in formValues)
+            temp.coord1 = (/.+,.+..+/).test(formValues.coord1) ? "" : "Coord l is not valid."
+        if ('borough' in formValues)
+            temp.borough = formValues.borough ? "" : "This field is required."
+        setErrors({
+            ...temp
+        })
+    }
 
     const handleForm = e => {
         setForm(prevState => ({
             ...prevState,
             [e.target.name]: e.target.value
         }))
+        if (validateOnChange)
+            validate({ [e.target.name]: e.target.value })
         console.log(form)
     }
 
+    const makeGrades = () => {
+        setGradesList(currentGrades => [
+            ...currentGrades,
+            {
+                id: generate(),
+                date: '',
+                grade: "",
+                score: ""
+            }
+        ]);
+        console.log(gradesList)
+    }
+
     const handleGrades = e => {
-        setGradesList(items => ({
-            ...items,
-            date: gradesList.date,
-            grade: gradesList.grade,
-            score: gradesList.score
-        }))
-        console.log()
+        setGradesList(prevState =>
+            produce(prevState => ({
+                ...prevState,
+                [e.target.name]: e.target.value
+            })
+            ))
+        console.log(gradesList)
     }
 
     const submitForm = () => {
@@ -63,6 +95,8 @@ const Add = props => {
             .catch(err => {
                 console.log(form)
                 console.log(`Error: ${err}`)
+                console.log(err.response.data)
+                setErrors(err.response.data)
             })
     }
 
@@ -91,58 +125,41 @@ const Add = props => {
                 <Grid container spacing={1} sx={{ marginTop: '15px' }} columns={12}>
                     <Grid item xs={12}><h2>Address</h2></Grid>
                     <Grid item xs={4}>
-                        <TextField style={textFieldStyle} label='Building' name="building" onChange={handleForm} placeholder="Enter Building number" />
-                    </Grid>
-                    <Grid item xs={2}>
-                        <TextField style={textFieldStyle} type='number' label='Co-ord 1' name="coord1" onChange={handleForm} placeholder="Enter first coordinate" />
-                    </Grid>
-                    <Grid item xs={2}>
-                        <TextField style={textFieldStyle} type='number' label='Co-ord 2' name="coord2" onChange={handleForm} placeholder="Enter second coordinate" />
+                        <MyTextField label='Building' name="building" onChange={handleForm} error={errors.building} />
                     </Grid>
                     <Grid item xs={4}>
-                        <TextField style={textFieldStyle} type='street' label='Street' name="street" onChange={handleForm} placeholder="Enter street name" />
+                        <MyTextField type='number' label='Co-ord Lat' name="coord1" onChange={handleForm} error={errors.coord} />
+                        <MyTextField type='number' label='Co-ord Long' name="coord2" onChange={handleForm} error={errors.coord} />
                     </Grid>
                     <Grid item xs={4}>
-                        <TextField style={textFieldStyle} type='text' label='Zipcode' name="zipcode" onChange={handleForm} placeholder="Enter Zipcode" />
+                        <MyTextField type='street' label='Street' name="street" onChange={handleForm} error={errors.street} />
                     </Grid>
                     <Grid item xs={4}>
-                    <FormControl sx={{ m: 1, minWidth: 120 }}>
-                        <InputLabel id="cuisine-select-label">Cuisine</InputLabel>
-                        <Select
-                            labelId="cuisine-select-label"
+                        <MyTextField type='text' label='Zipcode' name="zipcode" onChange={handleForm} error={errors.zipcode} />
+                    </Grid>
+                    <Grid item xs={4}>
+                        <MySelectField
                             label='Cuisine'
                             name="cuisine"
-                            defaultValue=""
                             onChange={handleForm}
-                        >
-                            <MenuItem value="american">American</MenuItem>
-                            <MenuItem value="delicatessen">Delicatessen</MenuItem>
-                            <MenuItem value="Turkish">Turkish</MenuItem>
-                            <MenuItem value="asian">Asian</MenuItem>
-                            <MenuItem value="chinese">Chinese</MenuItem>
-                            <MenuItem value="Bakery">Bakery</MenuItem>
-                            <MenuItem value="Ice Crean">Ice Cream</MenuItem>
-                            <MenuItem value="japanese">Jewish/Kosher</MenuItem>
-                            <MenuItem value="donuts">Donuts</MenuItem>
-                            <MenuItem value="chicken">Chicken</MenuItem>
-                            <MenuItem value="Indian">Indian</MenuItem>
-                        </Select>
-                    </FormControl>
+                            error={errors.cuisine}
+                        />
                     </Grid>
                     <Grid item xs={4}>
-                        <TextField style={textFieldStyle} type='text' label='Borough' name="borough" onChange={handleForm} placeholder="Enter Borough" />
+                        <MyTextField type='text' label='Borough' name="borough" onChange={handleForm} error={errors.borough} />
                     </Grid>
                     <Grid item xs={4}>
-                        <TextField style={textFieldStyle} type='text' label='Name' name="name" onChange={handleForm} placeholder="Name" />
+                        <MyTextField type='text' label='Name' name="name" onChange={handleForm} error={errors.name} />
                     </Grid>
                     <Grid item xs={4}>
-                        <TextField style={textFieldStyle} type='number' label='Restaurant ID' name="restaurant_id" onChange={handleForm} placeholder="Restaurant id" />
+                        <MyTextField type='number' label='Restaurant ID' name="restaurant_id" onChange={handleForm} error={errors.restaurant_id} />
                     </Grid>
+                    {/* <GradeForm gradesList={gradesList} /> */}
                     <Grid container spacing={1} sx={{ marginTop: '15px' }} columns={12}>
                         <Grid item xs={12}>
-                        <Typography>Grade</Typography>
-                        <Button
-                            onClick={() => {
+                            <Typography>Grade</Typography>
+                            <Button
+                                    onClick={() => {
                                 setGradesList(currentGrades => [
                                     ...currentGrades,
                                     {
@@ -154,7 +171,7 @@ const Add = props => {
                                 ]);
                                 console.log(gradesList)
                             }}
-                        > add grade </Button>
+                            > add grade </Button>
                         </Grid>
                         {gradesList.map((g, index) => {
                             return (
@@ -169,13 +186,15 @@ const Add = props => {
                                                     })
                                                 );
                                             }}
+                                            fullWidth
                                             value={g.date}
                                             label="Date"
-                                            type="datetime-local" name="date"
+                                            type="datetime-local"
+                                            defaultValue="yyyy-MM-DDThh:mm"
+                                            name="date"
                                             InputLabelProps={{
                                                 shrink: true,
                                             }}
-                                            placeholder="Date"
                                         />
                                     </Grid>
                                     <Grid item xs={4}>
@@ -188,8 +207,10 @@ const Add = props => {
                                                     })
                                                 );
                                             }}
+                                            fullWidth
                                             value={g.grade}
-                                            placeholder=" Grade"
+                                            label="Grade"
+                                            name='grade'
                                         />
                                     </Grid>
                                     <Grid item xs={4}>
@@ -202,55 +223,28 @@ const Add = props => {
                                                     })
                                                 );
                                             }}
+                                            fullWidth
                                             value={g.score}
-                                            placeholder=" score"
+                                            label="Score"
+                                            name='score'
                                         />
                                         <Button onClick={() => {
                                             console.log(index)
-                                             setGradesList(currentGrades =>
-                                                 currentGrades.filter(x => x.id !== g.id)
+                                            setGradesList(currentGrades =>
+                                                currentGrades.filter(x => x.id !== g.id)
                                                 //console.log(currentGrades)
-                                                 //currentGrades.splice(index, 1);
-                                             );
-                                            
+                                                //currentGrades.splice(index, 1);
+                                            );
+
                                         }}>
                                             x
                                         </Button>
                                     </Grid>
-                              
-                            </Fragment>
-                    );
-                    })}
+
+                                </Fragment>
+                            );
+                        })}
                     </Grid>
-                    {/* <TextField
-                                    onChange={e => {
-                                        const score = e.target.value;
-                                        setPeople(currentGrades =>
-                                            produce(currentGrades, v => {
-                                                v[index].score = score;
-                                            })
-                                        );
-                                    }}
-                                    value='score'
-                                    placeholder="Score"
-                                    style={textFieldStyle} type='number' label='Score' name="score"
-                               />
-                                <button
-                                    onClick={() => {
-                                        setPeople(currentGrades =>
-                                            currentGrades.filter(x => x.id !== p.id)
-                                        );
-                                    }}
-                                >
-                                    x
-                                </button> */}
-                    {/* <TextField style={textFieldStyle} type='date' id="datetime-local"
-                        label="Date"
-                        type="datetime-local" name="date" onChange={handleGrades} InputLabelProps={{
-                        shrink: true,
-                    }}/>
-                    <TextField style={textFieldStyle} type='text' label='Grade' name="grade" onChange={handleGrades} placeholder="A-Z" />
-                    <TextField style={textFieldStyle} type='number' label='Score' name="score" onChange={handleGrades} placeholder="Score" /> */}
 
                     <Box><Button onClick={submitForm}> Submit</Button></Box>
                 </Grid>

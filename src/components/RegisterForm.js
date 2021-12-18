@@ -1,21 +1,41 @@
 import { useState } from 'react'
 import axios from '../config/index'
-import { Grid, Paper, Avatar, Typography, TextField, Button, CardMedia } from '@mui/material/'
+import { Grid, Paper, Avatar, Typography, Button, CardMedia } from '@mui/material/'
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
+import { useNavigate } from 'react-router-dom'
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import MyTextField from './formFields/Input'
+import { Navigate } from 'react-router-dom';
 
 
 
-const RegisterForm = (props) => {
-  const [form, setForm] = useState({ name: "", email: "", password: "", role: "customer" })
+const RegisterForm = (props, validateOnChange = false) => {
+  const [form, setForm] = useState({ name: "", password: "", role: "customer" })
+  const [errors, setErrors] = useState({})
+  const error = null
+  let navigate = useNavigate()
 
+  const validate = (formValues = form) => {
+    let temp = { ...errors }
+    if ('name' in formValues)
+      temp.name = formValues.name.length > 3 ? "" : "This field must have at least 3 letters."
+    if ('email' in formValues)
+      temp.email = (/.+@.+..+/).test(formValues.email) ? "" : "Email is not valid."
+    if ('password' in formValues)
+      temp.password = formValues.password.length > 7 ? "" : "Minimum 8 characters required."
+    setErrors({
+      ...temp
+    })
+  }
 
   const handleForm = e => {
-    setForm(prevState => ({
-      ...prevState,
+    setForm(form => ({
+      ...form,
       [e.target.name]: e.target.value
     }))
+    if (validateOnChange)
+      validate({ [e.target.name]: e.target.value })
     console.log(form)
   }
 
@@ -25,18 +45,20 @@ const RegisterForm = (props) => {
     axios.post('/users/register', form)
       .then(response => {
         console.log(response.data)
-        window.location = "/"
         props.onLoggedIn(true, response.data.auth_token)
-        //setLoggedIn(true)
+        navigate('/account')
       })
-      .catch(err => console.log(`Error: ${err.response.data.errors}`))
+      .catch(err => {
+        console.log(`Error: ${err}`)
+        console.log(err.response)
+        setErrors(err.response.data)
+      })
   }
   const paperStyle = { padding: 20, margin: "0 auto" }
   const headerStyle = { margin: 0 }
   const avatarStyle = { backgroundColor: '#FF7982' }
   const btnstyle = { margin: '8px 0', background: '#c74402' }
-  const marginTop = { marginTop: 5 }
-  const textFieldStyle = { margin: '8px 0' }
+ 
   return (
     <Paper style={paperStyle}>
       <Grid container spacing={2} columns={12}>
@@ -53,12 +75,32 @@ const RegisterForm = (props) => {
             <AddCircleOutlineOutlinedIcon />
           </Avatar>
           <h2 style={headerStyle}>Sign Up</h2>
-          <Typography variant='caption' gutterBottom>Please fill this form to create an account !</Typography>
+          <Typography 
+            variant='caption' 
+            gutterBottom>Please fill this form to create an account !
+          </Typography>
       
-        <TextField fullWidth style={textFieldStyle} label='Name' name="name" onChange={handleForm} placeholder="Enter your name" />
-        <TextField fullWidth style={textFieldStyle} label='Email' name="email" onChange={handleForm} placeholder="Enter your email" />
-        <TextField fullWidth style={textFieldStyle} type="password" label='Password' name="password" onChange={handleForm} placeholder="Enter your password" />
-        {/* <TextField fullWidth label='Confirm Password' placeholder="Confirm your password"/> */}
+          <MyTextField 
+            label='Name'
+            name="name" 
+            onChange={handleForm} 
+            error={errors.name}
+           />
+      
+          <MyTextField 
+            label='Email' 
+            name="email" 
+            onChange={handleForm} 
+            error={errors.email} 
+          />
+      
+          <MyTextField
+          type="password"
+            name="password"
+            label="Password"           
+            onChange={handleForm}
+            error={errors.password}
+          />
         <FormControlLabel
           control={<Checkbox name="checkedA" />}
           label="I accept the terms and conditions."
