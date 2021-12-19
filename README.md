@@ -1,7 +1,7 @@
 ## Restaurant React Application
-Hosted Version: https://cob-restaurant-react.web.app/
-Hosted APi: https://cob-restaurant-api.herokuapp.com/
-GitHub with API: https://github.com/Clareob5/Restaurant-RestAPI
+Hosted Version: https://cob-restaurant-react.web.app/ \
+Hosted APi: https://cob-restaurant-api.herokuapp.com/ \
+GitHub with API: https://github.com/Clareob5/Restaurant-RestAPI /#\
 clone this repo and the run `npm ci` to install dependencies
 
 ## Available Scripts
