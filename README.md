@@ -1,6 +1,7 @@
-# Getting Started with Create React App
+Restaurant React Application
+Hosted Version: https://cob-restaurant-react.web.app/
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+clone this repo and the run `npm ci` to install dependencies
 
 ## Available Scripts
 
