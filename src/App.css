@@ -27,6 +27,26 @@
   transition: color 100ms ease-out;
 }
 
+
+.recipelink {
+  font-size: 13px;
+  font-weight: 400;
+  color: #c74402;
+  cursor: pointer;
+  text-decoration: none;
+  margin: 5px 5px;
+  border: solid; 
+  padding: 8px !important;
+  border-radius: 10px;
+
+  
+}
+
+.recipelink:hover {
+  text-decoration: underline;
+  transition: color 100ms ease-out;
+}
+
 .link>h2 {
   font-weight: 700;
   font-size: 20px;
@@ -34,6 +54,7 @@
 }
 
 .logoutBtn {
+  margin-left: 20px !important;
   color: White !important;
 }
 
@@ -45,10 +66,84 @@
   fill: "orange";
 }
 
-.padding {
+.paddingLeft {
   padding-left: 5px;
 } 
 
 .boxbtn {
   margin-bottom: 10px;
+  text-transform: none !important;
+}
+
+.bigMarginTop {
+  margin-top: 100px;
+}
+
+.deletebtn {
+  font-size: 16px !important;
+  font-weight: 400;
+  margin: 0px 5px !important;
+  padding: 3px !important;
+  border: solid !important; 
+  border-radius: 10px !important;
+  color: #d30f0f !important;
+  cursor: pointer;
+  text-transform: none !important;
+}
+.deletebtn:hover{
+  background-color: #d30f0f !important;
+  border-color: #d30f0f !important;
+  color: #fff !important;
+}
+
+.backbtn {
+  margin: 0px 5px;
+  font-size: 16px;
+  font-weight: 400;
+  border: solid; 
+  padding: 8px !important;
+  border-radius: 10px;
+  color: #424141;
+  cursor: pointer;
+  text-decoration: none;
+
+}
+
+.backbtn:hover{
+  background-color: #424141;
+  border-color: #424141;
+  color: #fff;
+}
+
+.editbtn {
+  width: 100px !important;
+  margin: 0px 5px 0px 5px !important;
+  font-size: 16px;
+  font-weight: 400;
+  padding: 8px !important;
+  border: solid; 
+  border-radius: 10px;
+  color: #15834c;
+  cursor: pointer;
+  text-decoration: none;
+  
+}
+
+.editbtn:hover{
+  background-color: #15834c;
+  border-color: #15834c;
+  color: #fff;
+}
+
+.padding{
+  padding: 10px 20px 25px 5px;
+}
+
+.loading{
+  margin: 50%
+}
+
+.submitbtn {
+  font-size: 16px !important;
+  text-transform: none !important;
 }

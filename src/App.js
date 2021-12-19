@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import "./App.css";
 
 //Components
-import Sidebar from './components/Sidebar'
+import Navbar from './components/NavBars'
 
 import SignUpSignIn from './pages/SignUpSignIn';
 import Home from './pages/Home';
@@ -13,6 +13,7 @@ import RestaurantsIndex from './pages/restaurants/Index';
 import RestaurantsShow from './pages/restaurants/Show';
 import RestaurantsEdit from './pages/restaurants/Edit';
 import Account from './pages/users/Account';
+import RecipesIndex from './pages/Recipes';
 import { UserContext } from './UserContext'
 
 import Box from '@mui/material/Box';
@@ -35,31 +36,11 @@ const App = () => {
   const onLoggedIn = (auth, token) => {
     setLoggedIn(auth)
     if (auth) {
-      console.log(token)
-      console.log(user)
       localStorage.setItem('token', token)
-      localStorage.setItem('user', JSON.stringify(user))
     }
     else {
-      // console.log('hiiiiii')
-      // axios.post('/users/logout', {
-      //   email: user.email,
-      //   password: user.password
-      // }, {
-      //   headers: {
-      //     "Authorization": `Bearer ${token}`
-      //   }
-
-      // })
-      //   .then(response => {
-      //     console.log(response.data)
            setLoggedIn(false)
            localStorage.removeItem('token')
-      //     navigate('/')
-      //   })
-      //   .catch(err => {
-      //     console.log(`Error: ${err}`)
-      //   })
         }
     }
  
@@ -79,13 +60,13 @@ return (
   <Router>
     <Box sx={{ display: 'flex' }}   >
       <UserContext.Provider value={userValue}>
-        <Sidebar onLoggedIn={onLoggedIn} loggedIn={loggedIn} />
-
+        <Navbar onLoggedIn={onLoggedIn} loggedIn={loggedIn} />
         <Routes>
           <Route path="/" element={<Home onLoggedIn={onLoggedIn} loggedIn={loggedIn} />} />
           <Route path="/register" element={<SignUpSignIn onLoggedIn={onLoggedIn} loggedIn={loggedIn} />} />
           <Route path="/login" element={<SignUpSignIn onLoggedIn={onLoggedIn} loggedIn={loggedIn} />} />
           <Route path="/restaurants" element={<RestaurantsIndex onLoggedIn={onLoggedIn} loggedIn={loggedIn} />} />
+          <Route path="/recipes" element={<RecipesIndex />} />
           {authRestaurants}
           <Route path="*" element={<PageNotFound />} />
         </Routes>

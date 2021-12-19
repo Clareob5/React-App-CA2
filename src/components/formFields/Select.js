@@ -3,12 +3,12 @@ import { FormControl, InputLabel, Select as MuiSelect, MenuItem, FormHelperText 
 
 const Select = (props) => {
 
-    const { name, label, value, error = null, onChange, options } = props;
+    const { name, label, value, error = null, onChange } = props;
 
     return (
         <FormControl variant="outlined"
             fullWidth
-            sx={{ m: 1}}
+            style={{ margin: 10}}
             {...(error && { error: true })}>
             <InputLabel>{label}</InputLabel>
             <MuiSelect
@@ -23,15 +23,15 @@ const Select = (props) => {
                 <MenuItem value="American">American</MenuItem>
                 <MenuItem value="Delicatessen">Delicatessen</MenuItem>
                 <MenuItem value="Turkish">Turkish</MenuItem>
-                <MenuItem value="asian">Asian</MenuItem>
-                <MenuItem value="chinese">Chinese</MenuItem>
+                <MenuItem value="Asian">Asian</MenuItem>
+                <MenuItem value="Chinese">Chinese</MenuItem>
                 <MenuItem value="Bakery">Bakery</MenuItem>
                 <MenuItem value="Ice Crean">Ice Cream</MenuItem>
-                <MenuItem value="japanese">Japanese</MenuItem>
-                <MenuItem value="donuts">Donuts</MenuItem>
-                <MenuItem value="chicken">Chicken</MenuItem>
+                <MenuItem value="Japanese">Japanese</MenuItem>
+                <MenuItem value="Donuts">Donuts</MenuItem>
+                <MenuItem value="Chicken">Chicken</MenuItem>
                 <MenuItem value="Indian">Indian</MenuItem>
-                <MenuItem value="jewish/Kosher">Jewish/Kosher</MenuItem>
+                <MenuItem value="Jewish/Kosher">Jewish/Kosher</MenuItem>
                 <MenuItem value="Other">Other</MenuItem>
             </MuiSelect>
             {error && <FormHelperText>{error}</FormHelperText>}

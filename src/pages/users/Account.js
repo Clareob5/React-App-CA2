@@ -1,71 +1,63 @@
 import axios from '../../config/index'
-import {  useState,useContext, useEffect} from 'react'
-import { useNavigate, Link } from 'react-router-dom'
-import { Button, Paper, Typography, Grid, CardMedia, Container } from '@mui/material';
-import {UserContext} from '../../UserContext'
+import {  useState, useEffect} from 'react'
+import { Paper, Typography, Grid, CardMedia, Container } from '@mui/material';
+import UsersTable from '../../components/UsersTable'
+//import {UserContext} from '../../UserContext'
 
 const Account = props => {
-  const {user, setUser} = useContext(UserContext);
-  let id = user._id
-  let navigate = useNavigate()
+  //const {user, setUser} = useContext(UserContext);
+  const [currentUser, setCurrentUser] = useState({});
 
-  let token = localStorage.getItem('token')
-  console.log(user)
+  let id = localStorage.getItem('user')
+
 
   useEffect(() => {
     axios.get(`users/${id}`)
       .then(response => {
         console.log(response.data)
-        setUser(response.data)
+        setCurrentUser(response.data.user)
       })
       .catch(err => {
         console.log(`Error: ${err}`)
       })
   }, [id])
 
-  if (!user) return null
+  if (!currentUser) return null
 
-  const onDelete = (id) => {
-    axios.delete(`/users/${id}`, {
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    })
-      .then(response => {
-        console.log(response.data)
-        navigate("/")
-      })
-      .catch(err => {
-        console.log(`Error: ${err}`)
-      })
-  }
+  const info = { fontSize: 16, fontWeight: 300, margin: 1 }
+  const heading = { fontSize: 28, fontWeight: 600, margin: 1, paddingBottom: 2 }
 
     return (
-      <Container className="marginTop">
-
+      <Container className="bigMarginTop">
 
         <Paper variant="outlined">
-          <Typography sx={{ fontSize: 28, fontWeight: 500 }}>
-            Account Info
-          </Typography>
           <Grid container spacing={2} columns={12} >
             <Grid item xs={6}>
-              <Typography sx={{ fontSize: 14 }}>
-                <b>Name: </b> {user.name}
+              <Typography sx={heading}>
+                Account Info
               </Typography>
-              <Link to='edit'>Edit</Link>
-              <Button onClick={() => onDelete(user._id)}>Delete</Button>
+              <Typography sx={info}>
+                <b>Name: </b> {currentUser.name}
+              </Typography>
+              <Typography sx={info}>
+                <b>Email: </b> {currentUser.email}
+              </Typography>
+              <Typography sx={info}>
+                <b>Role: </b> {currentUser.role}
+              </Typography>              
             </Grid>
             <Grid item xs={6} >
               <CardMedia
                 component="img"
-                height="500"
-                image="../img/restaurantImg.jpg"
+                height="300"
+                image="../img/accountImg.jpg"
                 alt="Restaurant"
               />
             </Grid>
           </Grid>
         </Paper>
+        {currentUser.role === 'admin' ? <UsersTable /> : " "
+        }
       </Container>
     )
 }

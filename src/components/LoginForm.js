@@ -1,7 +1,6 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import axios from '../config/index'
 import { useNavigate} from 'react-router-dom'
-import { useContext } from "react";
 
 import { Grid,Paper, Avatar, Button, CardMedia } from "@mui/material/"
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -51,7 +50,8 @@ const submitForm = () => {
   .then(response => {
     props.onLoggedIn(true, response.data.auth_token)
     localStorage.setItem('user', response.data.info.id)
-    console.log(response.data.info.id)
+    setUser(response.data.info)
+    console.log(user)
     navigate('/')
   })
   .catch(err => {

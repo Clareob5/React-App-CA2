@@ -1,6 +1,7 @@
-import axios from '../config/index.js'
+import axios from '../../config/index.js'
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { useState, useEffect } from 'react'
+import { Typography, Box, CircularProgress} from '@mui/material';
 
 const MapAPI = () => {
 
@@ -20,11 +21,13 @@ const MapAPI = () => {
             })
     },[token])
 
-    if (!restaurants) return <>Loading</>
+    if (!restaurants) return <><CircularProgress className="loading"/></>
 
 
     const containerStyle = {
-        width: '70vw',
+        mx: 'auto',
+        alignContent: 'center',
+        width: '60vw',
         height: '400px'
     };
 
@@ -34,9 +37,9 @@ const MapAPI = () => {
     };
 
     const markers  = restaurants.map(restaurant => {
-        console.log()
         return (
             <Marker
+                key={restaurant._id}
                 position={{
                     lat: restaurant.address.coord[1],
                     lng: restaurant.address.coord[0]
@@ -45,17 +48,12 @@ const MapAPI = () => {
         )
     })
 
-    const position = {
-        lat: 37.772,
-        lng: -122.214
-    }
-
-    // const onLoad = marker => {
-    //     console.log('marker: ', marker)
-    // }
-
-
+    const paperStyle = { borderRadius: 0, elevation: 0, padding: 50 }
     return (
+        <Box style={paperStyle} >
+        <Typography sx={{ marginBottom: 3, fontSize: 20, fontWeight: 400, textAlign: 'center' }}>Our Restaurant Locations</Typography>
+        <Typography sx={{ marginBottom: 3, fontSize: 16, fontWeight: 300, textAlign: 'center' }}>Currently our Restaurants are all in the Manhattan area</Typography>
+        <hr />
         <LoadScript
             googleMapsApiKey="AIzaSyAWDEfq4LYLCiAhTlNK2try2Vg8JG2ptc8"
         >
@@ -71,6 +69,7 @@ const MapAPI = () => {
                 <></>
             </GoogleMap>
         </LoadScript>
+        </Box>
     )
 }
 

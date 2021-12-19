@@ -24,7 +24,8 @@ const Banner = props => {
            } 
           
            </Grid>
-      <Grid item xs={6}><CardMedia component="img"
+      <Grid item xs={6}>
+        <CardMedia component="img"
         height="500"
         image="../img/bannerImg.jpeg"
         alt="Restaurant"></CardMedia>

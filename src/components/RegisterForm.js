@@ -6,14 +6,12 @@ import { useNavigate } from 'react-router-dom'
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import MyTextField from './formFields/Input'
-import { Navigate } from 'react-router-dom';
 
 
 
 const RegisterForm = (props, validateOnChange = false) => {
   const [form, setForm] = useState({ name: "", password: "", role: "customer" })
   const [errors, setErrors] = useState({})
-  const error = null
   let navigate = useNavigate()
 
   const validate = (formValues = form) => {
@@ -46,6 +44,7 @@ const RegisterForm = (props, validateOnChange = false) => {
       .then(response => {
         console.log(response.data)
         props.onLoggedIn(true, response.data.auth_token)
+        localStorage.setItem('user', response.data.info.id)
         navigate('/account')
       })
       .catch(err => {

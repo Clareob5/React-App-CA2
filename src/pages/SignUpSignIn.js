@@ -1,13 +1,7 @@
-import axios from 'axios'
-import { useEffect, useState } from 'react'
-import Paper from '@mui/material//Paper';
-import Tabs from '@mui/material//Tabs';
-import Tab from '@mui/material//Tab';
-import Typography from '@mui/material//Typography';
-import Box from '@mui/material//Box';
+import { useState } from 'react'
+import { Paper, Tabs, Tab, Typography, Box} from '@mui/material';
 import Login from '../components/LoginForm'
 import Signup from '../components/RegisterForm' 
-import Home from './Home' 
 
 const SignUpSignIn=(props)=>{
 

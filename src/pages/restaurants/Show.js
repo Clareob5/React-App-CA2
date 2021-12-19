@@ -1,13 +1,14 @@
 import axios from '../../config/index'
-import { useEffect, useState, Fragment } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
-import { Button, Paper, Card, CardContent, Typography, Grid, CardMedia, Container } from '@mui/material';
-import GradesList from '../../components/GradesList'
+import { Button, Paper, Typography, Grid, CardMedia, Container } from '@mui/material';
+import GradesList from '../../components/restaurants/GradesList'
+import DialogDelete from '../../components/restaurants/DialogDelete'
 
 const Show = () => {
   let { id } = useParams()
   const [restaurant, setRestaurant] = useState(null)
-  const [grades, setGrades] = useState([])
+  const [open, setOpen] = useState(false);
   let navigate = useNavigate()
 
   let token = localStorage.getItem('token')
@@ -27,79 +28,49 @@ const Show = () => {
 
   if (!restaurant) return null
 
-  const onDelete = (id) => {
-    axios.delete(`/restaurants/${id}`, {
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    })
-      .then(response => {
-        console.log(response.data)
-        navigate("/restaurants")
-      })
-      .catch(err => {
-        console.log(`Error: ${err}`)
-      })
-  }
 
-  // const gradesList = grades.map(grades => {
-  //   return (
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
-  //     <Grid item xs={6} key={grades._id}>
-  //       <Card sx={{ minWidth: 275 }}>
-  //         <CardContent>
-  //           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-  //             Restaurant Rating
-  //           </Typography>
-  //           <Typography variant="h5" component="div">
-  //             Grade: {grades.grade}
-  //           </Typography>
-  //           <Typography variant="body2">
-  //             Score: {grades.score}
-  //           </Typography>
-  //           <Typography sx={{ fontSize: 10 }} color="text.secondary" gutterBottom>
-  //             {grades.date}
-  //           </Typography>
-  //         </CardContent>
-  //       </Card>
-  //     </Grid>
-
-  //   )
-  // })
-
-
+  const info = { fontSize: 16, fontWeight: 300, margin: 1}
+  const subheading = { fontSize: 20, fontWeight: 600, margin: 1, marginTop: 2, marginBottom: 2 }
+  const heading = { fontSize: 28, fontWeight: 600, margin: 1, paddingBottom: 2 }
 
   return (
-    <Container className="marginTop">
+    <Container className="bigMarginTop">
       <Paper variant="outlined">
-        <Typography sx={{ fontSize: 28, fontWeight: 500 }}>
-          Restaurant Info
-        </Typography>
         <Grid container spacing={2} columns={12} >
           <Grid item xs={6}>
-            <Typography sx={{ fontSize: 14 }}>
+            <Typography sx={heading}>
+              Restaurant Info
+            </Typography>
+            <Typography sx={info}>
               <b>Title: </b> {restaurant.name}
             </Typography>
-            <Typography sx={{ fontSize: 16 }}>
-              Address:
+            <Typography sx={info}>
+              <b>Cuisine:</b>  {restaurant.cuisine}
             </Typography>
-            <Typography sx={{ fontSize: 16 }}>
-              Building Number:  {restaurant.address.building}
+            <Typography sx={subheading}>
+              Address
             </Typography>
-            <Typography sx={{ fontSize: 16 }}>
-              Street:  {restaurant.address.street}
+            <Typography sx={info}>
+              <b>Building Number:</b>   {restaurant.address.building}
             </Typography>
-            <Typography sx={{ fontSize: 16 }}>
-              Zipcode: {restaurant.address.zipcode}
+            <Typography sx={info}>
+              <b>Street:</b>   {restaurant.address.street}
             </Typography>
-            <Typography>
-              Borough:  {restaurant.borough}
+            <Typography sx={info}>
+              <b>Zipcode:</b>  {restaurant.address.zipcode}
             </Typography>
-            <Typography sx={{ fontSize: 16 }}>
-              Cuisine:  {restaurant.cuisine}
+            <Typography sx={info}>
+              <b>Borough:</b>  {restaurant.borough}
             </Typography>
-            <Link to='edit'>Edit</Link>
-            <Button onClick={() => onDelete(restaurant._id)}>Delete</Button>
+            <Link to='/restaurants' className='backbtn'>Cancel</Link>
+            <Link to='edit' className='editbtn'>Edit</Link>
+            {/* <Link to='edit' className='editbtn'>Edit</Link> */}
+            <Button className="deletebtn" onClick={handleClickOpen}>Delete</Button>
+            <DialogDelete id={id} open={open} setOpen={setOpen}/>
           </Grid>
           <Grid item xs={6} >
             <CardMedia
@@ -109,12 +80,12 @@ const Show = () => {
               alt="Restaurant"
             />
           </Grid>
-          <Grid item xs={12}>
-            <Typography sx={{ fontSize: 28, fontWeight: 500 }}>
-              Grades
-            </Typography>
-          </Grid>
-          <GradesList />
+        </Grid>
+        <Typography sx={{ fontSize: 26, fontWeight: 200, marginLeft: 1, borderBottom: 1, borderColor: 'grey.300' }}>
+          Grades
+        </Typography>
+        <Grid container spacing={2} columns={12}>
+          <GradesList restaurant={restaurant} setRestaurant={setRestaurant} />
         </Grid>
       </Paper>
     </Container>
@@ -122,9 +93,3 @@ const Show = () => {
 }
 
 export default Show
-
-    // axios.get(`http://localhost:8000/api/restaurants/${id}`, {
-    //         headers: {
-    //             "Authorization": `Bearer ${token}`
-    //        }
-    //     })
