@@ -9,9 +9,13 @@ const RecipeAPI = props => {
 
     useEffect(() => {
         //withCredentials: false, - solving cors issue 
+        //recipes wouldnt load because of cors
         if(recipes.length <= 0){
         axios.get(
-            `https://api.spoonacular.com/recipes/658007/similar?apiKey=1eeb745d38994dc294c596bcf5e4cefc&number=${props.numRecipes}`, {withCredentials: false}, {
+            `https://api.spoonacular.com/recipes/658007/similar?apiKey=1eeb745d38994dc294c596bcf5e4cefc&number=${props.numRecipes}`, 
+            {
+                withCredentials: false
+            }, {
             headers: {
                     'Access-Control-Allow-Origin': '*',
         }}
@@ -28,7 +32,7 @@ const RecipeAPI = props => {
         }
     }, [recipes])
 
-
+    //returns all the recipes according to recipe info component
     return (
       <>
         {recipes.map((recipe) => {

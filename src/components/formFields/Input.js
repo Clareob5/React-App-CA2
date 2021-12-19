@@ -3,8 +3,10 @@ import { TextField } from '@mui/material';
 
 const Input = (props) => {
 
+    //all the values to have as props for textField
     const { name, label, value,type, error = null, onChange } = props;
     const textFieldStyle = { margin: 10 }
+
     return (
         <TextField
             fullWidth
@@ -18,7 +20,7 @@ const Input = (props) => {
             InputLabelProps={{
                 shrink: true,
             }}
-            {...(error && { error: true, helperText: error })}
+            {...(error && { error: true, helperText: error })} //shows error helptext if theres an error
         />
     )
 }

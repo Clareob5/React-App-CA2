@@ -1,7 +1,9 @@
 import axios from '../../config/index'
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams, Link } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { Button, Paper, Typography, Grid, CardMedia, Container } from '@mui/material';
+
+//components
 import GradesList from '../../components/restaurants/GradesList'
 import DialogDelete from '../../components/restaurants/DialogDelete'
 
@@ -9,12 +11,7 @@ const Show = () => {
   let { id } = useParams()
   const [restaurant, setRestaurant] = useState(null)
   const [open, setOpen] = useState(false);
-  let navigate = useNavigate()
-
-  let token = localStorage.getItem('token')
-
-
-
+  
   useEffect(() => {
     axios.get(`/restaurants/${id}`)
       .then(response => {
@@ -28,7 +25,7 @@ const Show = () => {
 
   if (!restaurant) return null
 
-
+  //handling the dialog component
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -68,7 +65,6 @@ const Show = () => {
             </Typography>
             <Link to='/restaurants' className='backbtn'>Cancel</Link>
             <Link to='edit' className='editbtn'>Edit</Link>
-            {/* <Link to='edit' className='editbtn'>Edit</Link> */}
             <Button className="deletebtn" onClick={handleClickOpen}>Delete</Button>
             <DialogDelete id={id} open={open} setOpen={setOpen}/>
           </Grid>

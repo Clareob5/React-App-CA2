@@ -1,17 +1,20 @@
 import { useState } from 'react'
-import { Paper, Tabs, Tab, Typography, Box} from '@mui/material';
+import { Paper, Tabs, Tab, Typography, Box} from '@mui/material'; //style
+//components
 import Login from '../components/LoginForm'
 import Signup from '../components/RegisterForm' 
 
-const SignUpSignIn=(props)=>{
+
+const SignUpSignIn=(props) => {
 
 const [value,setValue]=useState(0)
 const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const paperStyle={width:800,margin:"100px auto"}
-  function TabPanel(props) {
+  const paperStyle= {width:800,margin:"100px auto"}
+
+  const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
   
     return (

@@ -1,15 +1,16 @@
 import axios from '../../config/index'
-import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, useMediaQuery } from '@mui/material';
+import { useNavigate } from 'react-router-dom'
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 
 
 const DialogDelete = props => {
 
+    //setting up navigate
     let navigate = useNavigate()
 
     let token = localStorage.getItem('token')
 
+    //axios delete to delete the restaurant and then navigate back to restaurants index
     const onDelete = (id) => {
         axios.delete(`/restaurants/${id}`, {
             headers: {
@@ -25,7 +26,7 @@ const DialogDelete = props => {
             })
     }
 
-  
+    //handles closing the dialog
     const handleClose = () => {
         props.setOpen(false);
     };

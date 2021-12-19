@@ -2,8 +2,8 @@ import {CardMedia, Grid, Typography, Paper} from '@mui/material'
 import { Link } from 'react-router-dom'
 
 const Banner = props => {
-  console.log(props)
 
+  //style for the banner
   const btnstyle = { borderRadius: 5, padding: '8px 40px', background: '#000', color: '#e8f5fe', textDecoration: 'none' }
   const paperStyle = { height: 500, background: '#fcfbfa', borderRadius: 1 }
   const alignCenter = {display: 'flex', width: '35vw', justifyContent: 'center', alignItems: 'center'}

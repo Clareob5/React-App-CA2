@@ -2,7 +2,6 @@ import { useState, useEffect, Fragment } from 'react'
 import { Box, Typography, Grid, Button } from '@mui/material';
 import { useNavigate, useParams } from 'react-router';
 import { produce } from 'immer'
-import { generate } from "shortid"
 import axios from '../../config';
 import SelectField from '../formFields/Select'
 import MyTextField from '../formFields/Input'
@@ -20,13 +19,13 @@ const Edit = (validateOnChange = false) => {
     const [loading, setLoading] = useState(true)
     const [errors, setErrors] = useState({})
 
+    //form validation for wihtin the form 
     const validate = (formValues = form) => {
         let temp = { ...errors }
         if ('building' in formValues)
             temp.building = formValues.building.length > 2 ? "" : "This field must have at least 3 numbers."
-        if ('coord' in formValues) {
+        if ('coord' in formValues) 
             temp.coord = formValues.coord.indexOf(",") > -1 ? "" : "Coordinates must be separated by a comma."
-        }
         if ('borough' in formValues)
             temp.borough = formValues.borough.length > 6 ? "" : "This field must have at least 7 letters."
         if ('restaurant_id' in formValues)
@@ -42,6 +41,7 @@ const Edit = (validateOnChange = false) => {
         })
     }
 
+    //validation for grades - couldnt get it to work all validation was showing an all elements instead of one
     // const validateGrades = (formValues = gradesList) => {
     //     let temp = { ...errors }
     //     if ('date' in formValues)
@@ -63,7 +63,6 @@ const Edit = (validateOnChange = false) => {
                 setForm(response.data.restaurant)
                 setGradesList(response.data.restaurant.grades);
                 setLoading(false)
-                //console.log(form)
             })
             .catch(err => {
                 console.log(`Error: ${err}`)
@@ -73,6 +72,7 @@ const Edit = (validateOnChange = false) => {
     if (!form) return null
 
 
+    //multi level handle form for handling within a nested object
     const handleForm = level => e => {
 
         if (!level) {
@@ -95,20 +95,20 @@ const Edit = (validateOnChange = false) => {
         console.log(form)
     }
 
-    const makeGrades = () => {
-        setGradesList(currentGrades => [
-            ...currentGrades,
-            {
-                _id: generate(),
-                date: 'yyyy-MM-ddThh:mm',
-                grade: "",
-                score: ""
-            }
-        ]);
-    }
+    //fro making new grades
+    // const makeGrades = () => {
+    //     setGradesList(currentGrades => [
+    //         ...currentGrades,
+    //         {
+    //             _id: generate(),
+    //             date: 'yyyy-MM-ddThh:mm',
+    //             grade: "",
+    //             score: ""
+    //         }
+    //     ]);
+    // }
 
     const submitForm = () => {
-        console.log(form.address.coord)
 
         axios.put(`/restaurants/${id}`, {
             address: {
@@ -177,8 +177,8 @@ const Edit = (validateOnChange = false) => {
                     <Grid container spacing={3} sx={{ marginTop: '15px', marginLeft: '30px', marginRight: '30px' }} columns={10}>
                         <Grid item xs={10}>
                             <Typography sx={{ fontSize: 20, fontWeight: 400, borderBottom: 0.5, borderColor: 'grey.400' }}>Grades</Typography>
-                            <Button
-                                sx={btnstyleAddG} onClick={makeGrades} > add grade </Button>
+                            {/* <Button
+                                sx={btnstyleAddG} onClick={makeGrades} > add grade </Button> */}
                         </Grid>
                         {gradesList.map((g, index) => {
                             return (

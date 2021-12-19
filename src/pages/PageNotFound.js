@@ -13,8 +13,7 @@ const PageNotFound = () => {
       
       <CardMedia
         component="img"
-        height="450px"
-        width="100px"
+        height="700px"
         image="../../img/404.gif"
         alt="Restaurant"
       />

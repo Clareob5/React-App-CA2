@@ -1,8 +1,7 @@
 import { Container, Grid, Typography, Box, CardMedia} from '@mui/material'
 import Recipe from '../components/spoonacular/RecipeAPI'
 
-
-
+//recipes from spoonacular
 const Recipes = props => {
 
       return (
@@ -20,7 +19,7 @@ const Recipes = props => {
                     alt="Restaurant"></CardMedia>
                 <div className="marginTop">
                 <Grid container spacing={2} columns={12} >
-                        {/* <Recipe numRecipes={12} /> */}
+                        <Recipe numRecipes={12} /> 
                 </Grid>
                 </div>
             </Box>

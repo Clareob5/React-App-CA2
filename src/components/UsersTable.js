@@ -27,42 +27,13 @@ const UsersTable = props => {
 
   if (!users) return null
 
-  const onDelete = (id) => {
-    axios.delete(`/users/${id}`, {
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    })
-      .then(response => {
-        console.log(response.data)
-        navigate("/")
-      })
-      .catch(err => {
-        console.log(`Error: ${err}`)
-      })
-  }
   const columns = [
 
-    //{ field: '_id', headerName: 'ID', width: 100 },
+    { field: '_id', headerName: 'ID', width: 100 },
     { field: 'name', headerName: 'Name', width: 150 },
     { field: "email", headerName: 'Email', width: 180 },
     { field: 'role', headerName: 'Role', width: 150 },
-    {
-      field: "_id",
-      headerName: 'Actions',
-      renderCell: (params) => {
-        return (
-          <>
-                <Link to={`/users/${params.row._id}`}><VisibilityIcon /></Link>
-                <Link to={`/users/${params.row._id}/edit`}><EditIcon /></Link>
-              </>
-        );
-      }
-    }
   ]
-
-
-
 
   return (
     <Container className="marginTop">
