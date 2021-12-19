@@ -2,7 +2,7 @@
 Hosted Version: https://cob-restaurant-react.web.app/ \
 Hosted APi: https://cob-restaurant-api.herokuapp.com/ \
 GitHub with API: https://github.com/Clareob5/Restaurant-RestAPI \
-Figma Wireframes: https://www.figma.com/file/DXtLk9NBoDyMLJZkPg3ux2/React-App-CA2?node-id=0%3A1
+Figma Wireframes: https://www.figma.com/file/DXtLk9NBoDyMLJZkPg3ux2/React-App-CA2?node-id=0%3A1 \
 clone this repo and the run `npm ci` to install dependencies
 
 ## Available Scripts
